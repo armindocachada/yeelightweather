@@ -1,0 +1,8 @@
+version: "3.7"
+services:
+  yeelightweather:
+     container_name: yeelightweather
+     build:
+        context: .
+        dockerfile: Dockerfile
+     network_mode: host

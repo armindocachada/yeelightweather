@@ -81,7 +81,9 @@ def determineWeather():
     return {"precipitation": precipitation, "heavyRain": heavyRain, "heavySnow": heavySnow, "temperatureCode": temperatureCode }
 
 
-def setupWeatherFlow(bulb,weather,durationFlowSeconds=60):
+def setupWeatherFlow(bulbIp,weather,durationFlowSeconds=60):
+  try: 
+    bulb = Bulb(bulbIp)
     hue = 0
     saturation = 100
     if weather['temperatureCode'] == "Hot":
@@ -120,18 +122,24 @@ def setupWeatherFlow(bulb,weather,durationFlowSeconds=60):
         )
     bulb.turn_on()
     bulb.start_flow(flow)
+  except:
+   print("Error setting flow in bulb",file=sys.stderr)  
 
 
-weather = determineWeather()
+from multiprocessing import Process
+if __name__ == '__main__':
+    print("main line")
 
+    weather = determineWeather()
 
+    from yeelight import discover_bulbs,Bulb
+    from yeelight import HSVTransition,Flow
+    import sys
+    bulbs = discover_bulbs()
+    for b in bulbs:
+       print("starting {}".format(b['ip']))
+       bulbIp = b['ip']
+       p = Process(target=setupWeatherFlow, args=(bulbIp,weather))
+       p.start()
+       p.join()
 
-from yeelight import discover_bulbs,Bulb
-from yeelight import HSVTransition,Flow
-
-bulbs = discover_bulbs()
-for b in bulbs:
-    print("starting {}".format(b['ip']))
-    ip = b['ip']
-    bulb = Bulb(ip)
-    setupWeatherFlow(bulb, weather)

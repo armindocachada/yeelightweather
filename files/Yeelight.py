@@ -103,9 +103,9 @@ def setupWeatherFlow(bulbIp,weather,durationFlowSeconds=60):
         if weather["heavyRain"] or weather["heavySnow"]:
             duration = 100
         else:
-            duration = 1000
+            duration = 500
 
-        count = durationFlowSeconds * 1000 / duration
+        count = (durationFlowSeconds * 1000) / duration
         transitions = [HSVTransition(hue, saturation, brightness=bright, duration=duration)
                        for bright in range(0, 100, 15)]
 
@@ -113,6 +113,7 @@ def setupWeatherFlow(bulbIp,weather,durationFlowSeconds=60):
             count=count,
             transitions=transitions
         )
+        print("There is rain/snow. heavyRain={}, heavySnow={}".format(weather["heavyRain"],weather["heavySnow"]))
     else:
         transitions = [HSVTransition(hue, saturation, brightness=100, duration=1000)]
 
@@ -120,6 +121,8 @@ def setupWeatherFlow(bulbIp,weather,durationFlowSeconds=60):
             count=durationFlowSeconds,
             transitions=transitions
         )
+
+        print("There is no precipitation. Setting just the color of the temperature ahead")
     bulb.turn_on()
     bulb.start_flow(flow)
   except:

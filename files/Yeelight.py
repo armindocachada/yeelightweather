@@ -33,13 +33,13 @@ def determineWeather():
     conn = http.client.HTTPSConnection("api-metoffice.apiconnect.ibmcloud.com")
 
     headers = {
-        'x-ibm-client-id': "24858361-ac19-438c-9962-862572052efa",
-        'x-ibm-client-secret': "rC6mH0oT7sU2dJ3qA7sG1bG3fK4wK0vH8rL4vR5rA7dH1gC3lQ",
+        'x-ibm-client-id': os.getenv('metoffice_client_id'),
+        'x-ibm-client-secret': os.getenv('metoffice_client_secret'),
         'accept': "application/json"
     }
 
-    latitude = 51.485741
-    longitude = 0.027864
+    latitude = os.getenv('latitude')
+    longitude = os.getenv('longitude')
 
     conn.request("GET",
                  "/metoffice/production/v0/forecasts/point/daily?excludeParameterMetadata=false&includeLocationName=true&latitude={}&longitude={}".format(

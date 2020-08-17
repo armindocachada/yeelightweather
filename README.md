@@ -107,7 +107,7 @@ This should trigger your smart bulb and the color will be according to the tempe
 
 Have fun!
 
-<img src="/images/yeelightweather_finalresult_animated_gif" />
+<img src="/images/yeelightweather_finalresult_animated.gif" />
 
 Useful links:
 =============
@@ -116,9 +116,7 @@ Useful links:
 
 [Yeelight Developer website](https://www.yeelight.com/en_US/developer)
 
-[
-
-YeeLight library - python-yeelight 0.5.3 documentation
+[YeeLight library - python-yeelight 0.5.3 documentation
 ------------------------------------------------------
 
 ### The YeeLight Python library is a small library that lets you control your YeeLight RGB LED bulbs over WiFi. The latest…

@@ -1,7 +1,7 @@
 Python Automation — Smart Home — Using my smart lights to alert me about the weather when I wake up
 ===================================================================================================
 
-<img alt="/images/yeelightweatherstatic.png"/>
+<img src="/images/yeelightweatherstatic.png"/>
 
 Waking up to warm yet rainy day with the Yeelightweather App
 

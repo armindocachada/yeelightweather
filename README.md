@@ -23,6 +23,69 @@ Once you have registered for an account, you need to create an application key, 
 
 The Metoffice API uses my GPS coordinates so I can get pinpoint accuracy to get the weather data.
 
+```
+def determineWeather():
+    """
+    We call the weather API and get the weather for the next few hours. 
+    The API itself gives way too much information. All I want to know, 
+    what is the minimum and maximum temperature and whether is going
+    to rain or snow. And whether it is going to be light or heavy.
+     >>> determineWeather()
+     {'precipitation': False, 'heavyRain': False, 'heavySnow': False, 'temperatureCode': 'Hot'}
+    """
+    import http.client
+    import json
+
+    conn = http.client.HTTPSConnection("api-metoffice.apiconnect.ibmcloud.com")
+
+    headers = {
+        'x-ibm-client-id': "<Your-Client-ID>",
+        'x-ibm-client-secret': "<Your-Client-Secret>",
+        'accept': "application/json"
+    }
+
+    latitude = <MY LATITUDE>
+    longitude = <MY LONGITUDE>
+
+    conn.request("GET",
+                 "/metoffice/production/v0/forecasts/point/daily?excludeParameterMetadata=false&includeLocationName=true&latitude={}&longitude={}".format(
+                     latitude, longitude), headers=headers)
+
+    res = conn.getresponse()
+    data = res.read()
+
+    weather = json.loads(data.decode("utf-8"))
+
+    precipitation = False
+    heavyRain = False
+    heavySnow = False
+    minTemperature = None
+    maxTemperature = None
+    
+    for timeForecast in weather['features'][0]['properties']['timeSeries']:
+        probabilityOfPrecipitation = timeForecast['dayProbabilityOfPrecipitation']
+        dayProbabilityOfHeavyRain = timeForecast['dayProbabilityOfHeavyRain']
+        dayProbabilityOfHeavySnow = timeForecast['dayProbabilityOfHeavySnow']
+        if probabilityOfPrecipitation >= probabilityOfPrecipitationThreshold:
+            precipitation = True
+        if dayProbabilityOfHeavyRain >= probabilityOfHeavyRainThreshold:
+            heavyRain = True
+        if dayProbabilityOfHeavySnow >= ProbabilityOfHeavySnowThreshold:
+            heavySnow = True
+
+        temperature = timeForecast['dayMaxFeelsLikeTemp']
+
+        if (not minTemperature or temperature < minTemperature ):
+            minTemperature = temperature
+
+        if (not maxTemperature or temperature > maxTemperature ):
+            maxTemperature = temperature
+
+    temperatureCode = classifyTemperature(minTemperature, maxTemperature)
+
+    return {"precipitation": precipitation, "heavyRain": heavyRain, "heavySnow": heavySnow, "temperatureCode": temperatureCode }
+    ```
+
 In the code excerpt above you can see l how I call the Metoffice [Weather DataHub API](https://www.metoffice.gov.uk/services/data/datapoint/notifications/weather-datahub). I had to register first and create an app within the Datahub in order to a client id and a client secret, which are both needed in order for the API call to work. The logic for the code above is simple. We call the weather API and get the weather for the next few hours. The API itself gives way too much information. All I want to know, what is the minimum and maximum temperature and whether is going to rain or snow. And whether it is going to be light or heavy.
 
 Now that we have a representation of the weather, I need to setup the smart lights based on that information. Yeelight, which is the brand smart lights that I use has a convenient and simple Python library called **Yeelight**. With this API I can control my smart lights locally via internal IP address.

@@ -107,7 +107,7 @@ This should trigger your smart bulb and the color will be according to the tempe
 
 Have fun!
 
-<img src="/images/yeelightweather_finalresult_animated.gif" />
+<img src="/images/yeelightweather_finalresult_animated_gif" />
 
 Useful links:
 =============

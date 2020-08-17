@@ -254,20 +254,4 @@ Useful links:
 
 [Yeelight Developer website](https://www.yeelight.com/en_US/developer)
 
-[YeeLight library - python-yeelight 0.5.3 documentation
-------------------------------------------------------
-
-### The YeeLight Python library is a small library that lets you control your YeeLight RGB LED bulbs over WiFi. The latest…
-
-#### yeelight.readthedocs.io
-
-](https://yeelight.readthedocs.io/en/latest/)[
-
-armindocachada/yeelightweather
-------------------------------
-
-### Contribute to armindocachada/yeelightweather development by creating an account on GitHub.
-
-#### github.com
-
-](https://github.com/armindocachada/yeelightweather)
+[YeeLight library - python-yeelight 0.5.3 documentation](https://yeelight.readthedocs.io/en/latest/)

@@ -84,7 +84,7 @@ def determineWeather():
     temperatureCode = classifyTemperature(minTemperature, maxTemperature)
 
     return {"precipitation": precipitation, "heavyRain": heavyRain, "heavySnow": heavySnow, "temperatureCode": temperatureCode }
-    ```
+```
 
 In the code excerpt above you can see l how I call the Metoffice [Weather DataHub API](https://www.metoffice.gov.uk/services/data/datapoint/notifications/weather-datahub). I had to register first and create an app within the Datahub in order to a client id and a client secret, which are both needed in order for the API call to work. The logic for the code above is simple. We call the weather API and get the weather for the next few hours. The API itself gives way too much information. All I want to know, what is the minimum and maximum temperature and whether is going to rain or snow. And whether it is going to be light or heavy.
 

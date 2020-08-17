@@ -91,6 +91,53 @@ In the code excerpt above you can see l how I call the Metoffice [Weather DataHu
 Now that we have a representation of the weather, I need to setup the smart lights based on that information. Yeelight, which is the brand smart lights that I use has a convenient and simple Python library called **Yeelight**. With this API I can control my smart lights locally via internal IP address.
 
 Below is the code I created to set my lights based on the weather information.
+```
+def setupWeatherFlow(bulb,weather,durationFlowSeconds=60):
+    """
+    We use HSV color transitions. In case there is no precipitation, the color will remain static for a minute or two.
+    If there is precipitation, the light will pulse with varying levels of brightness.
+    Depending on the temperature the light will be deep red if it is hot or deep blue if it is freezing.
+    The flow itself will end automatically based on the durationFlowSeconds parameter.
+    """
+    hue = 0
+    saturation = 100
+    if weather['temperatureCode'] == "Hot":
+        hue = 370
+    elif weather['temperatureCode'] == "Warm":
+        hue = 370
+        saturation = 41
+    elif weather['temperatureCode'] == "Fair":
+        hue = 50
+    elif weather['temperatureCode'] == "Cold":
+        hue = 173
+    elif weather['temperatureCode'] == "Freezing":
+        hue = 240
+
+
+    if (weather["precipitation"]):
+        if weather["heavyRain"] or weather["heavySnow"]:
+            duration = 100
+        else:
+            duration = 1000
+
+        count = durationFlowSeconds * 1000 / duration
+        transitions = [HSVTransition(hue, saturation, brightness=bright, duration=duration)
+                       for bright in range(0, 100, 15)]
+
+        flow = Flow(
+            count=count,
+            transitions=transitions
+        )
+    else:
+        transitions = [HSVTransition(hue, saturation, brightness=100, duration=1000)]
+
+        flow = Flow(
+            count=durationFlowSeconds,
+            transitions=transitions
+        )
+    bulb.turn_on()
+    bulb.start_flow(flow)
+```
 
 So now we have a way to set our smart lights to change colour depending on the weather. The last bit that is missing, is that I have nowhere to run this code. I don’t want to run it on my laptop because I don’t always have it switched on. So raspberry pi comes to the rescue. Always on, so this is the ideal place to run this code from.
 

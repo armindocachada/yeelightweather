@@ -143,6 +143,34 @@ So now we have a way to set our smart lights to change colour depending on the w
 
 I like running everything inside docker as it makes easy dealing with all the dependencies, that often take a long time to install and configure.
 
+docker-compose.yml:
+```
+version: "3.7"
+services:
+  yeelightweather:
+     container_name: yeelightweather
+     build:
+        context: .
+        dockerfile: Dockerfile
+     network_mode: host
+     restart: always
+```
+Dockerfile:
+```
+FROM python:rc-slim-buster
+RUN TZ=Europe/London && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN apt-get -y update && apt-get -y install cron
+RUN pip3 install yeelight
+COPY files/* /home/
+
+#RUN chmod 755 /script.sh /entry.sh
+RUN /usr/bin/crontab /home/crontab.txt
+
+# Run the command on container startup
+RUN touch /var/log/cron.log
+
+CMD cron && tail -f /var/log/cron.log
+```
 I always like to use **docker compose** as it allows me to package and configure everything that I need in one place and is much more convenient than using a Dockerfile alone. The great thing about **Docker** is that it allows me to reuse **docker** images that have already been built and install new things on top of it. That is what I have done here. I used an existing image created for python which is compatible with my Macbook pro and can also run on Raspberry PI.
 
 I installed the **yeelight** library with pip3 and also changed the default timezone in the container to be in London. Finally as I want to run my script every morning, I installed cron.

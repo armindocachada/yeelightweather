@@ -107,7 +107,7 @@ This should trigger your smart bulb and the color will be according to the tempe
 
 Have fun!
 
-<img alt="Image for post" class="s t u by ai" src="https://miro.medium.com/max/2560/1\*tFppA1sB7AJrXGw10\_vI4w.gif" width="1280" height="720" srcSet="https://miro.medium.com/max/552/1\*tFppA1sB7AJrXGw10\_vI4w.gif 276w, https://miro.medium.com/max/1104/1\*tFppA1sB7AJrXGw10\_vI4w.gif 552w, https://miro.medium.com/max/1280/1\*tFppA1sB7AJrXGw10\_vI4w.gif 640w, https://miro.medium.com/max/1456/1\*tFppA1sB7AJrXGw10\_vI4w.gif 728w, https://miro.medium.com/max/1632/1\*tFppA1sB7AJrXGw10\_vI4w.gif 816w, https://miro.medium.com/max/1808/1\*tFppA1sB7AJrXGw10\_vI4w.gif 904w, https://miro.medium.com/max/1984/1\*tFppA1sB7AJrXGw10\_vI4w.gif 992w, https://miro.medium.com/max/2000/1\*tFppA1sB7AJrXGw10\_vI4w.gif 1000w" sizes="1000px"/>
+<img src="/images/yeelightweather_finalresult_animated.gif" />
 
 Useful links:
 =============

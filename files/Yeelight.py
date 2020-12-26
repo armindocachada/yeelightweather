@@ -33,13 +33,13 @@ def determineWeather():
     conn = http.client.HTTPSConnection("api-metoffice.apiconnect.ibmcloud.com")
 
     headers = {
-        'x-ibm-client-id': os.getenv('metoffice_client_id'),
-        'x-ibm-client-secret': os.getenv('metoffice_client_secret'),
+        'x-ibm-client-id': "24858361-ac19-438c-9962-862572052efa",
+        'x-ibm-client-secret': "rC6mH0oT7sU2dJ3qA7sG1bG3fK4wK0vH8rL4vR5rA7dH1gC3lQ",
         'accept': "application/json"
     }
 
-    latitude = os.getenv('latitude')
-    longitude = os.getenv('longitude')
+    latitude = 51.485741
+    longitude = 0.027864
 
     conn.request("GET",
                  "/metoffice/production/v0/forecasts/point/daily?excludeParameterMetadata=false&includeLocationName=true&latitude={}&longitude={}".format(
@@ -88,29 +88,31 @@ def setupWeatherFlow(bulbIp,weather,durationFlowSeconds=60):
     saturation = 100
     if weather['temperatureCode'] == "Hot":
         hue = 370
+        (red,green,blue) = (255, 0, 0)
     elif weather['temperatureCode'] == "Warm":
         hue = 370
         saturation = 41
+        (red,green,blue)=(250,150,152)
     elif weather['temperatureCode'] == "Fair":
         hue = 50
+        (red,green,blue) = (255, 213, 0)
     elif weather['temperatureCode'] == "Cold":
-        hue = 173
+        hue = 66, 
+        (red,green,blue) = (50, 168, 164)
     elif weather['temperatureCode'] == "Freezing":
         hue = 240
-
-
+        (red,green,blue) = (0,0,255)
     if (weather["precipitation"]):
         if weather["heavyRain"] or weather["heavySnow"]:
-            duration = 100
+            duration = 200
         else:
-            duration = 500
+            duration = 2000 
 
         count = (durationFlowSeconds * 1000) / duration
-        transitions = [HSVTransition(hue, saturation, brightness=bright, duration=duration)
-                       for bright in range(0, 100, 15)]
-
+        transitions = yeelight.transitions.pulse(red, green, blue, duration, 100) 
         flow = Flow(
             count=count,
+            action=Action.recover,
             transitions=transitions
         )
         print("There is rain/snow. heavyRain={}, heavySnow={}".format(weather["heavyRain"],weather["heavySnow"]))
@@ -127,16 +129,19 @@ def setupWeatherFlow(bulbIp,weather,durationFlowSeconds=60):
     bulb.start_flow(flow)
   except:
    print("Error setting flow in bulb",file=sys.stderr)  
-
-
+   print("Unexpected error:", sys.exc_info()[0])
+   pass
+   
 from multiprocessing import Process
 if __name__ == '__main__':
     print("main line")
 
     weather = determineWeather()
-
+    import yeelight.transitions
+    from yeelight import *
     from yeelight import discover_bulbs,Bulb
-    from yeelight import HSVTransition,Flow
+    from yeelight import HSVTransition,Flow,transitions
+    from yeelight.flow import Action
     import sys
     bulbs = discover_bulbs()
     for b in bulbs:
